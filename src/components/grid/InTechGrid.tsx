@@ -1,7 +1,22 @@
-import type { FunctionComponent } from "react";
+import { useEffect, type FunctionComponent } from "react";
+import { useMIDI } from "../../utils/useMidi";
 
-interface Props {}
+export const InTechGrid: FunctionComponent = () => {
+  const { connectionState, deviceName, connect, error } = useMIDI();
 
-export const InTechGrid: FunctionComponent<Props> = () => {
-  return <>grid</>;
+  useEffect(() => {
+    connect();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
+
+  return (
+    <>
+      {deviceName} ({connectionState})
+    </>
+  );
 };
