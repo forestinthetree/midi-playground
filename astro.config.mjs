@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro/config';
-import mkcert from 'vite-plugin-mkcert';
+import { defineConfig } from "astro/config";
+import mkcert from "vite-plugin-mkcert";
 
 import react from "@astrojs/react";
 
@@ -10,9 +10,6 @@ export default defineConfig({
   site: PUBLIC_SITE_URL,
   vite: {
     plugins: [mkcert()],
-    server: {
-      https: true
-    },
   },
-  integrations: [react()]
+  integrations: [react()],
 });
