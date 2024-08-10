@@ -3,7 +3,7 @@ interface Params {
 }
 
 export type ConnectionState =
-  | "idle"
+  | "init"
   /**
    * Available, but no MIDI devices connected
    */
@@ -23,7 +23,7 @@ export function supportsMIDI() {
 }
 
 export function createMIDIManager({ onConnectionChange }: Params = {}) {
-  let connectionState: ConnectionState = "idle";
+  let connectionState: ConnectionState;
   let midiAccess: MIDIAccess;
   let error: string;
 
@@ -61,6 +61,8 @@ export function createMIDIManager({ onConnectionChange }: Params = {}) {
     connectionState = state;
     onConnectionChange && onConnectionChange(state);
   };
+
+  updateConnectionState("init");
 
   return {
     getError() {

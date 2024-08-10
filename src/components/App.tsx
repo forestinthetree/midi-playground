@@ -8,9 +8,7 @@ export const App: FunctionComponent = () => {
     <Theme>
       <Box>
         <Container size="2" my="4">
-          <Box p="3">
-            <InTechGrid />
-          </Box>
+          <InTechGrid />
         </Container>
       </Box>
     </Theme>
