@@ -1,8 +1,9 @@
 import { useEffect, type FunctionComponent } from "react";
-import { useMIDI } from "../../utils/useMidi";
+import { useMIDI } from "../../utils/useMIDI";
 import { Connection } from "./Connection";
 import { Box, Flex, Heading } from "@radix-ui/themes";
 import type { ConnectionState } from "../../utils/createMIDIManager";
+import { MIDIInputs } from "./MIDIInputs";
 
 function Header({
   connect,
@@ -21,7 +22,7 @@ function Header({
   );
 }
 
-export const InTechGrid: FunctionComponent = () => {
+export const MIDIPlayground: FunctionComponent = () => {
   const { connectionState, connect, error, midiInputs } = useMIDI();
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export const InTechGrid: FunctionComponent = () => {
       p="5"
       style={{
         borderRadius: "var(--radius-3)",
-        background: "var(--gray-a2)",
+        background: "var(--gray-2)",
       }}
     >
       <Flex direction="column" gap="4">
@@ -54,17 +55,7 @@ export const InTechGrid: FunctionComponent = () => {
             refresh the page.
           </Box>
         )}
-        {midiInputs && (
-          <ul>
-            {Object.entries(midiInputs).map(([id, input]) => {
-              return (
-                <li key={id}>
-                  <code>{id}</code>: {input.name}
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        {midiInputs && <MIDIInputs midiInputs={midiInputs} />}
       </Flex>
     </Box>
   );

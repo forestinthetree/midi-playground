@@ -6,7 +6,7 @@ import {
   type MIDIManager,
 } from "./createMIDIManager";
 
-type MIDIInputs = Record<string, MIDIInput>;
+export type MIDIInputs = Record<string, MIDIInput>;
 
 export function useMIDI() {
   const [midiAccess, setMidiAccess] = useState<MIDIAccess>();

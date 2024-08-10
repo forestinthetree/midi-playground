@@ -5,5 +5,5 @@
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
   },
-  "cSpell.words": ["astro", "astrojs", "biomejs", "dotenvx"]
+  "cSpell.words": ["astro", "astrojs", "biomejs", "dotenvx", "Intech"]
 }
