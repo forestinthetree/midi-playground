@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   createMIDIManager,
+  supportsMIDI,
   type ConnectionState,
   type MIDIManager,
 } from "./createMIDIManager";
@@ -9,8 +10,9 @@ export function useMIDI() {
   const [midiDevice, setMidiDevice] = useState<MIDIAccess>();
   const [deviceName, setDeviceName] = useState<string>();
   const [connectionState, setConnectionState] = useState<ConnectionState>();
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<string>();
   const midiManager = useRef<MIDIManager>();
+  const [doesSupportMIDI, setDoesSupportMIDI] = useState<boolean>();
 
   const connect = useCallback(() => {
     async function connectMIDI() {
@@ -35,7 +37,18 @@ export function useMIDI() {
     }
   }, [connectionState]);
 
+  // Run MIDI check on the client side
+  useEffect(() => {
+    const supports = supportsMIDI();
+    setDoesSupportMIDI(supports);
+
+    if (!supports) {
+      setError("Environment does not support WebMIDI");
+    }
+  }, []);
+
   return {
+    supportsMIDI: doesSupportMIDI,
     connect,
     midiDevice,
     deviceName,
