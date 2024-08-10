@@ -13,8 +13,7 @@ export type ConnectionState =
   | "notSupported";
 export interface MIDIConnection {
   connectionState: ConnectionState;
-  midiDevice?: MIDIAccess;
-  deviceName?: string;
+  midiAccess?: MIDIAccess;
 }
 
 export type MIDIManager = ReturnType<typeof createMIDIManager>;
@@ -25,19 +24,17 @@ export function supportsMIDI() {
 
 export function createMIDIManager({ onConnectionChange }: Params = {}) {
   let connectionState: ConnectionState = "idle";
-  let midiDevice: MIDIAccess;
-  let deviceName: string;
+  let midiAccess: MIDIAccess;
   let error: string;
 
   const connect = async (): Promise<MIDIConnection> => {
     if (supportsMIDI()) {
       try {
-        midiDevice = await navigator.requestMIDIAccess();
+        midiAccess = await navigator.requestMIDIAccess();
 
-        if (!midiDevice.inputs.size) {
+        if (!midiAccess.inputs.size) {
           updateConnectionState("available");
         } else {
-          deviceName = midiDevice.inputs.values().next().value?.name;
           updateConnectionState("connected");
         }
       } catch (e) {
@@ -56,8 +53,7 @@ export function createMIDIManager({ onConnectionChange }: Params = {}) {
 
     return {
       connectionState,
-      midiDevice,
-      deviceName,
+      midiAccess,
     };
   };
 

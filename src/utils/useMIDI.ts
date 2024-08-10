@@ -6,13 +6,15 @@ import {
   type MIDIManager,
 } from "./createMIDIManager";
 
+type MIDIInputs = Record<string, MIDIInput>;
+
 export function useMIDI() {
-  const [midiDevice, setMidiDevice] = useState<MIDIAccess>();
-  const [deviceName, setDeviceName] = useState<string>();
+  const [midiAccess, setMidiAccess] = useState<MIDIAccess>();
   const [connectionState, setConnectionState] = useState<ConnectionState>();
   const [error, setError] = useState<string>();
   const midiManager = useRef<MIDIManager>();
   const [doesSupportMIDI, setDoesSupportMIDI] = useState<boolean>();
+  const [midiInputs, setMIDIInputs] = useState<MIDIInputs>();
 
   const connect = useCallback(() => {
     async function connectMIDI() {
@@ -22,10 +24,17 @@ export function useMIDI() {
         },
       });
 
-      const { midiDevice, deviceName } = await midiManager.current.connect();
+      const { midiAccess } = await midiManager.current.connect();
+      setMidiAccess(midiAccess);
 
-      setDeviceName(deviceName);
-      setMidiDevice(midiDevice);
+      if (midiAccess) {
+        const inputs = {} as MIDIInputs;
+        for (let input of midiAccess.inputs.values()) {
+          inputs[input.id] = input;
+        }
+
+        setMIDIInputs(inputs);
+      }
     }
 
     connectMIDI();
@@ -50,8 +59,8 @@ export function useMIDI() {
   return {
     supportsMIDI: doesSupportMIDI,
     connect,
-    midiDevice,
-    deviceName,
+    midiAccess,
+    midiInputs,
     connectionState,
     error,
   };
