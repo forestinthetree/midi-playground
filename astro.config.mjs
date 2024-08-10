@@ -8,6 +8,9 @@ const { PUBLIC_SITE_URL } = process.env;
 // https://astro.build/config
 export default defineConfig({
   site: PUBLIC_SITE_URL,
+  devToolbar: {
+    enabled: false,
+  },
   vite: {
     plugins: [mkcert()],
   },
