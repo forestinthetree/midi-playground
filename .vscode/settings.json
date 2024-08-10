@@ -4,5 +4,6 @@
   "editor.tabSize": 2,
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode"
-  }
+  },
+  "cSpell.words": ["astro", "astrojs", "biomejs", "dotenvx"]
 }
