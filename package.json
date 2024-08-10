@@ -1,7 +1,14 @@
 {
-  "name": "grid-en16",
+  "name": "midi-playground",
+  "description": "A playground for MIDI input devices using WebMIDI",
   "type": "module",
   "version": "0.0.1",
+  "author": "Tu Tak Tran <tak@forestinthetree.com> (https://www.forestinthetree.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forestinthetree/midi-playground.git"
+  },
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "dotenvx run -f .env.dev -- astro dev --port=7200 --host",
     "start": "dotenvx run -f .env.dev -- astro dev",
