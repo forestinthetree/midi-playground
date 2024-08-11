@@ -14,7 +14,9 @@
     "start": "dotenvx run -f .env.dev -- astro dev",
     "build": "astro check && dotenvx run -f .env.dev -- astro build",
     "preview": "dotenvx run -f .env.dev -- astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "biome:check": "biome check",
+    "biome:fix": "biome check --write"
   },
   "dependencies": {
     "@astrojs/check": "^0.8.2",

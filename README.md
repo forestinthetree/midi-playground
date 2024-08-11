@@ -11,6 +11,22 @@ Currently supports:
 1. Install dependencies: `npm install`
 1. Run dev server: `npm run dev`
 
+### Linting/Formatting
+
+This project uses [Biome](https://biomejs.dev/) for linting and formatting. If using VSCode, it should be set up if the [official biome extension](https://biomejs.dev/reference/vscode/) is installed.
+
+To manually check for issues:
+
+```
+npm run biome:check
+```
+
+To fix issues:
+
+```
+npm run biome:fix
+```
+
 ## License
 
 MIDI Playground is open source under the [GNU Affero General Public License Version 3 (AGPLv3)](https://www.gnu.org/licenses/agpl-3.0.en.html) or any later version.
