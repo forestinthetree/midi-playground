@@ -4,7 +4,7 @@ import {
   type MIDIManager,
   createMIDIManager,
   supportsMIDI,
-} from "./createMIDIManager";
+} from "../utils/createMIDIManager";
 
 export type MIDIInputs = Record<string, MIDIInput>;
 

@@ -1,7 +1,7 @@
 import { Box, Flex, Heading } from "@radix-ui/themes";
 import { type FunctionComponent, useEffect } from "react";
-import type { ConnectionState } from "../../utils/createMIDIManager";
-import { useMIDI } from "../../utils/useMIDI";
+import { useMIDI } from "../hooks/useMIDI";
+import type { ConnectionState } from "../utils/createMIDIManager";
 import { Connection } from "./Connection";
 import { MIDIInputs } from "./MIDIInputs";
 

@@ -1,7 +1,7 @@
 import { Box, Container, Theme } from "@radix-ui/themes";
 import type { FunctionComponent } from "react";
 import "@radix-ui/themes/styles.css";
-import { MIDIPlayground } from "./midi/MIDIPlayground";
+import { MIDIPlayground } from "./midi/components/MIDIPlayground";
 
 export const App: FunctionComponent = () => {
   return (

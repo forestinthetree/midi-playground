@@ -5,7 +5,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Badge, Button, Flex } from "@radix-ui/themes";
 import type { FunctionComponent, ReactNode } from "react";
-import type { ConnectionState } from "../../utils/createMIDIManager";
+import type { ConnectionState } from "../utils/createMIDIManager";
 
 interface Props {
   connect: () => void;
