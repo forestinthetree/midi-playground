@@ -1,8 +1,8 @@
-import { useEffect, type FunctionComponent } from "react";
+import { Box, Flex, Heading } from "@radix-ui/themes";
+import { type FunctionComponent, useEffect } from "react";
+import type { ConnectionState } from "../../utils/createMIDIManager";
 import { useMIDI } from "../../utils/useMIDI";
 import { Connection } from "./Connection";
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import type { ConnectionState } from "../../utils/createMIDIManager";
 import { MIDIInputs } from "./MIDIInputs";
 
 function Header({
@@ -16,7 +16,7 @@ function Header({
     <Flex direction="row" gap="3" justify="between">
       <Heading as="h1">MIDI Playground</Heading>
       {connectionState && (
-        <Connection connectionState={connectionState!} connect={connect!} />
+        <Connection connectionState={connectionState} connect={connect} />
       )}
     </Flex>
   );
@@ -27,7 +27,7 @@ export const MIDIPlayground: FunctionComponent = () => {
 
   useEffect(() => {
     connect();
-  }, []);
+  }, [connect]);
 
   useEffect(() => {
     if (error) {

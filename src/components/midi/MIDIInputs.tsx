@@ -1,6 +1,6 @@
+import { Card } from "@radix-ui/themes";
 import { Fragment, type FunctionComponent, type ReactNode } from "react";
 import type { MIDIInputs as MIDIInputsType } from "../../utils/useMIDI";
-import { Card } from "@radix-ui/themes";
 import { Grid } from "../in-tech/Grid";
 
 interface Props {

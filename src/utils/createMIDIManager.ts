@@ -59,7 +59,9 @@ export function createMIDIManager({ onConnectionChange }: Params = {}) {
 
   const updateConnectionState = (state: ConnectionState) => {
     connectionState = state;
-    onConnectionChange && onConnectionChange(state);
+    if (onConnectionChange) {
+      onConnectionChange(state);
+    }
   };
 
   updateConnectionState("init");

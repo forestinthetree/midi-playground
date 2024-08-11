@@ -1,10 +1,10 @@
+import {
+  ExclamationTriangleIcon,
+  LightningBoltIcon,
+  ReloadIcon,
+} from "@radix-ui/react-icons";
 import { Badge, Button, Flex } from "@radix-ui/themes";
 import type { FunctionComponent, ReactNode } from "react";
-import {
-  ReloadIcon,
-  LightningBoltIcon,
-  ExclamationTriangleIcon,
-} from "@radix-ui/react-icons";
 import type { ConnectionState } from "../../utils/createMIDIManager";
 
 interface Props {

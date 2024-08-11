@@ -1,5 +1,5 @@
-import { useEffect, useState, type FunctionComponent } from "react";
-import { Box, Grid as RadixGrid, Card, Flex, Heading } from "@radix-ui/themes";
+import { Box, Card, Flex, Heading, Grid as RadixGrid } from "@radix-ui/themes";
+import { type FunctionComponent, useEffect, useState } from "react";
 
 interface Props {
   input: MIDIInput;

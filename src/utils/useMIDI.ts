@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  createMIDIManager,
-  supportsMIDI,
   type ConnectionState,
   type MIDIManager,
+  createMIDIManager,
+  supportsMIDI,
 } from "./createMIDIManager";
 
 export type MIDIInputs = Record<string, MIDIInput>;
@@ -29,7 +29,7 @@ export function useMIDI() {
 
       if (midiAccess) {
         const inputs = {} as MIDIInputs;
-        for (let input of midiAccess.inputs.values()) {
+        for (const input of midiAccess.inputs.values()) {
           inputs[input.id] = input;
         }
 
