@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { throttle } from "../../../utils/throttle";
+import { MIDI_OUT_THROTTLE_TIME } from "../constants";
 import {
   type ConnectionState,
   type MIDIManager,
@@ -7,6 +9,12 @@ import {
 } from "../utils/createMIDIManager";
 
 export type MIDIInputs = Record<string, MIDIInput>;
+export type MIDIOutputSend = MIDIOutput["send"];
+export interface MIDIOutputObject {
+  throttledSend: MIDIOutputSend;
+  output: MIDIOutput;
+}
+export type MIDIOutputs = Record<string, MIDIOutputObject>;
 
 export function useMIDI() {
   const [midiAccess, setMidiAccess] = useState<MIDIAccess>();
@@ -15,6 +23,7 @@ export function useMIDI() {
   const midiManager = useRef<MIDIManager>();
   const [doesSupportMIDI, setDoesSupportMIDI] = useState<boolean>();
   const [midiInputs, setMIDIInputs] = useState<MIDIInputs>();
+  const [midiOutputs, setMIDIOutputs] = useState<MIDIOutputs>();
 
   const connect = useCallback(() => {
     async function connectMIDI() {
@@ -32,8 +41,20 @@ export function useMIDI() {
         for (const input of midiAccess.inputs.values()) {
           inputs[input.id] = input;
         }
-
         setMIDIInputs(inputs);
+
+        const outputs = {} as MIDIOutputs;
+        for (const output of midiAccess.outputs.values()) {
+          const throttledSend: MIDIOutputSend = throttle((message) => {
+            output.send(message);
+          }, MIDI_OUT_THROTTLE_TIME);
+
+          outputs[output.id] = {
+            throttledSend,
+            output,
+          };
+        }
+        setMIDIOutputs(outputs);
       }
     }
 
@@ -61,6 +82,7 @@ export function useMIDI() {
     connect,
     midiAccess,
     midiInputs,
+    midiOutputs,
     connectionState,
     error,
   };

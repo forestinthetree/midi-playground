@@ -1,9 +1,15 @@
 import { Box, Flex, Heading } from "@radix-ui/themes";
-import { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, type ReactNode, useEffect } from "react";
 import { useMIDI } from "../hooks/useMIDI";
+import type { MIDIInputMap } from "../types";
 import type { ConnectionState } from "../utils/createMIDIManager";
 import { Connection } from "./Connection";
 import { MIDIInputs } from "./MIDIInputs";
+
+interface Props {
+  midiInputMap: MIDIInputMap;
+  children?: ReactNode;
+}
 
 function Header({
   connect,
@@ -14,7 +20,7 @@ function Header({
 }) {
   return (
     <Flex direction="row" gap="3" justify="between">
-      <Heading as="h1">MIDI Playground</Heading>
+      <Heading as="h1">Devices</Heading>
       {connectionState && (
         <Connection connectionState={connectionState} connect={connect} />
       )}
@@ -22,8 +28,12 @@ function Header({
   );
 }
 
-export const MIDIPlayground: FunctionComponent = () => {
-  const { connectionState, connect, error, midiInputs } = useMIDI();
+export const MIDIPlayground: FunctionComponent<Props> = ({
+  midiInputMap,
+  children,
+}) => {
+  const { connectionState, connect, error, midiInputs, midiOutputs } =
+    useMIDI();
 
   useEffect(() => {
     connect();
@@ -51,11 +61,18 @@ export const MIDIPlayground: FunctionComponent = () => {
               fontStyle: "italic",
             }}
           >
-            No MIDI input connected. Connect it up, then click on "Sync MIDI" or
+            No MIDI devices connected. Connect one, then click on "Sync MIDI" or
             refresh the page.
           </Box>
         )}
-        {midiInputs && <MIDIInputs midiInputs={midiInputs} />}
+        {midiInputs && (
+          <MIDIInputs
+            midiInputs={midiInputs}
+            midiOutputs={midiOutputs}
+            midiInputMap={midiInputMap}
+          />
+        )}
+        {connectionState === "connected" && children}
       </Flex>
     </Box>
   );

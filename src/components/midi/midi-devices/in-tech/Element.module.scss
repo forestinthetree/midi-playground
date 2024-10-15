@@ -1,0 +1,45 @@
+$led-border-radius: 5px;
+$led-width: 25px;
+$led-height: 23px;
+
+$element-size: 40px;
+
+.colorLED {
+  border-radius: $led-border-radius;
+  width: $led-width;
+  height: $led-height;
+  border: none;
+  background: none;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 5px;
+  }
+  &::-webkit-color-swatch {
+    border-radius: $led-border-radius;
+    box-shadow: 0 0 5px 1px var(--bgColor);
+  }
+
+  &.isBlack::-webkit-color-swatch {
+    box-shadow: none;
+  }
+}
+
+.element {
+  --card-border-radius: 30px;
+  --card-background-color: var(--accent-1);
+  border: 4px solid var(--accent-3);
+  width: $element-size;
+  height: $element-size;
+
+  &.buttonPressed {
+    border-color: var(--accent-8);
+  }
+
+  &.encodeValue {
+    --card-background-color: var(--accent-3);
+  }
+
+  svg {
+    margin-top: -3px;
+  }
+}
