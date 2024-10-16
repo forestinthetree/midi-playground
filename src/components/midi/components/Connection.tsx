@@ -1,63 +1,30 @@
-import {
-  ExclamationTriangleIcon,
-  LightningBoltIcon,
-  ReloadIcon,
-} from "@radix-ui/react-icons";
-import { Badge, Button, Flex } from "@radix-ui/themes";
-import type { FunctionComponent, ReactNode } from "react";
-import type { ConnectionState } from "../utils/createMIDIManager";
+import { CheckIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Badge, Flex } from "@radix-ui/themes";
+import type { FunctionComponent } from "react";
+import type { MIDIState } from "../utils/createMIDIManager";
 
 interface Props {
-  connect: () => void;
-  connectionState: ConnectionState;
+  midiState: MIDIState;
 }
 
-function ReconnectButton({
-  connect,
-  children,
-}: {
-  connect: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <Button
-      color="amber"
-      size="1"
-      variant="soft"
-      style={{ cursor: "pointer" }}
-      onClick={connect}
-    >
-      {children}
-    </Button>
-  );
-}
-
-export const Connection: FunctionComponent<Props> = ({
-  connect,
-  connectionState,
-}) => {
+export const Connection: FunctionComponent<Props> = ({ midiState }) => {
   return (
     <Flex gap="1" align="center">
-      {connectionState === "connected" && (
-        <Badge color="grass" size="3">
+      {midiState === "available" && (
+        <Badge color="gray" size="3">
           <Flex gap="1" align="center">
-            <LightningBoltIcon /> Connected
+            <CheckIcon /> MIDI Available
           </Flex>
         </Badge>
       )}
-      {connectionState === "available" && (
-        <ReconnectButton connect={connect}>
-          <ReloadIcon /> Sync MIDI
-        </ReconnectButton>
-      )}
-      {connectionState === "error" && (
+      {midiState === "error" && (
         <Badge color="amber" size="3">
           <Flex gap="1" align="center">
             <ExclamationTriangleIcon /> MIDI Error
           </Flex>
         </Badge>
       )}
-      {connectionState === "notSupported" && (
+      {midiState === "notSupported" && (
         <Badge color="tomato" size="3">
           <Flex gap="1" align="center">
             <ExclamationTriangleIcon /> MIDI not supported

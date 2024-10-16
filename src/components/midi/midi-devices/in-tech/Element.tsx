@@ -15,8 +15,7 @@ import {
 } from "../../../color-input/ColorPicker";
 import { type ColorState, useColor } from "../../../color-input/useColor";
 import { MIDI_OUT_THROTTLE_TIME } from "../../constants";
-import type { MIDIOutputSend } from "../../hooks/useMIDI";
-import type { RGBLayer } from "../../types";
+import type { MIDIOutputSend, RGBLayer } from "../../types";
 import { createRGBMessagesForLED } from "../../utils/midiMessage";
 import { waitFor } from "../../utils/waitFor";
 import styles from "./Element.module.scss";
@@ -52,12 +51,12 @@ const TwoLayerColors = ({
   index,
   layer1Color,
   layer2Color,
-  outputSend,
+  throttledSend,
 }: {
   index: number;
   layer1Color: ColorState;
   layer2Color: ColorState;
-  outputSend: MIDIOutputSend;
+  throttledSend: MIDIOutputSend;
 }) => {
   return (
     <Flex direction="row" align="center">
@@ -75,7 +74,7 @@ const TwoLayerColors = ({
           });
 
           for (const message of messages) {
-            outputSend(message);
+            throttledSend(message);
             await waitFor(MIDI_OUT_THROTTLE_TIME);
           }
         }}
@@ -94,7 +93,7 @@ const TwoLayerColors = ({
           });
 
           for (const message of messages) {
-            outputSend(message);
+            throttledSend(message);
             await waitFor(MIDI_OUT_THROTTLE_TIME);
           }
         }}
@@ -108,14 +107,14 @@ const LayersColor = ({
   layer1Color,
   layer2Color,
   bothLayerColor,
-  outputSend,
+  throttledSend,
   layersType,
 }: {
   index: number;
   layer1Color: ColorState;
   layer2Color: ColorState;
   bothLayerColor: ColorState;
-  outputSend: MIDIOutputSend;
+  throttledSend: MIDIOutputSend;
   layersType: "1" | "2" | "both";
 }) => {
   let layers: RGBLayer[] = [1];
@@ -143,7 +142,7 @@ const LayersColor = ({
           });
 
           for (const message of messages) {
-            outputSend(message);
+            throttledSend(message);
             await waitFor(MIDI_OUT_THROTTLE_TIME);
           }
 
@@ -157,9 +156,9 @@ const LayersColor = ({
 export const Element: FunctionComponent<{
   index: number;
   inputState: InputState;
-  outputSend?: MIDIOutputSend;
+  throttledSend?: MIDIOutputSend;
   sendSendLayerType?: SendLayerType;
-}> = ({ index, inputState, outputSend, sendSendLayerType }) => {
+}> = ({ index, inputState, throttledSend, sendSendLayerType }) => {
   const layer1Color = useColor({ defaultRgb: DEFAULT_RGB_COLOR });
   const layer2Color = useColor({ defaultRgb: DEFAULT_RGB_COLOR });
   const bothLayerColor = useColor({ defaultRgb: DEFAULT_RGB_COLOR });
@@ -181,7 +180,7 @@ export const Element: FunctionComponent<{
 
   return (
     <Flex direction="column" align="center">
-      {outputSend &&
+      {throttledSend &&
         (sendSendLayerType === "1" ||
           sendSendLayerType === "2" ||
           sendSendLayerType === "both") && (
@@ -190,16 +189,16 @@ export const Element: FunctionComponent<{
             layer1Color={layer1Color}
             layer2Color={layer2Color}
             bothLayerColor={bothLayerColor}
-            outputSend={outputSend}
+            throttledSend={throttledSend}
             layersType={sendSendLayerType}
           />
         )}
-      {outputSend && sendSendLayerType === "split" && (
+      {throttledSend && sendSendLayerType === "split" && (
         <TwoLayerColors
           index={index}
           layer1Color={layer1Color}
           layer2Color={layer2Color}
-          outputSend={outputSend}
+          throttledSend={throttledSend}
         />
       )}
       <Card

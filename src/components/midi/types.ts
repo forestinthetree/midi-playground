@@ -1,9 +1,17 @@
-import type { ReactNode } from "react";
-import type { MIDIOutputObject } from "./hooks/useMIDI";
+import type { ReactElement } from "react";
 
-export type MIDIInputMap = Record<
+export type MIDIOutputSend = MIDIOutput["send"];
+export interface MIDIDevice {
+  id: string;
+  name: string;
+  input: MIDIInput;
+  output?: MIDIOutput;
+  throttledSend?: MIDIOutputSend;
+}
+
+export type MIDIDeviceConfig = Record<
   string,
-  (params: { input: MIDIInput; output?: MIDIOutputObject }) => ReactNode
+  (params: { device: MIDIDevice }) => ReactElement
 >;
 
 export type RGBLayer = 1 | 2 | "both";

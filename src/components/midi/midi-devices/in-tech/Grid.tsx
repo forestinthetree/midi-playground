@@ -11,21 +11,16 @@ import {
   Grid as RadixGrid,
   Tooltip,
 } from "@radix-ui/themes";
-import {
-  type CSSProperties,
-  type FunctionComponent,
-  useEffect,
-  useState,
-} from "react";
+import { type CSSProperties, type FunctionComponent, useState } from "react";
 import { getInitialArray } from "../../../../utils/array";
 import { clamp } from "../../../../utils/numbers";
-import type { MIDIOutputObject, MIDIOutputSend } from "../../hooks/useMIDI";
-import { useOutputState } from "../../hooks/useMIDIOutputState";
+import { useDeviceMIDIDataHandler } from "../../hooks/useDeviceMIDIDataHandler";
+import { useDeviceState } from "../../hooks/useDeviceState";
+import type { MIDIDevice, MIDIOutputSend } from "../../types";
 import { Element } from "./Element";
 
 interface Props {
-  input: MIDIInput;
-  outputObject?: MIDIOutputObject;
+  device: MIDIDevice;
   onGridStateChange?: OnGridStateChange;
   onConnectionStateChange?: OnConnectionStateChange;
 }
@@ -33,11 +28,11 @@ interface Props {
 export type OnGridStateChange = (params: {
   update: GridUpdateData;
   state: GridState;
-  outputSend?: MIDIOutputSend;
+  throttledSend?: MIDIOutputSend;
 }) => void;
 export type OnConnectionStateChange = (params: {
   state: MIDIPortDeviceState;
-  outputSend?: MIDIOutputSend;
+  throttledSend?: MIDIOutputSend;
 }) => void;
 export type EventType = "Button" | "Encoder";
 
@@ -80,12 +75,7 @@ function getValue({ type, rawData }: { type: EventType; rawData: number }) {
   return value;
 }
 
-export const Grid: FunctionComponent<Props> = ({
-  input,
-  outputObject,
-  onGridStateChange,
-  onConnectionStateChange,
-}) => {
+export const Grid: FunctionComponent<Props> = ({ device }) => {
   const [gridState, setGridState] = useState<GridState>(
     getInitialArray({
       length: NUM_INPUTS,
@@ -98,14 +88,12 @@ export const Grid: FunctionComponent<Props> = ({
     })
   );
   const [sendSendLayerType, setSendLayerType] = useState<SendLayerType>("1");
-  const midiOutputState = useOutputState({
-    output: outputObject?.output,
-    onConnectionStateChange,
-    outputSend: outputObject?.throttledSend,
-  });
 
-  useEffect(() => {
-    input.onmidimessage = ({ data }) => {
+  const deviceState = useDeviceState({ device });
+
+  useDeviceMIDIDataHandler({
+    device,
+    onData(data: MIDIMessageEvent["data"]) {
       if (!data) {
         return;
       }
@@ -143,27 +131,10 @@ export const Grid: FunctionComponent<Props> = ({
           ...newValue,
         };
 
-        if (onGridStateChange) {
-          onGridStateChange({
-            update: {
-              type,
-              index,
-              value,
-              raw: rawData,
-            },
-            state: newGridState,
-            outputSend: outputObject?.throttledSend,
-          });
-        }
-
         return newGridState;
       });
-    };
-
-    return () => {
-      input.onmidimessage = null;
-    };
-  }, [input, onGridStateChange, outputObject?.throttledSend]);
+    },
+  });
 
   const cardStyle = {
     "--card-padding": "var(--space-6)",
@@ -183,14 +154,14 @@ export const Grid: FunctionComponent<Props> = ({
           }}
         >
           Grid EN16{" "}
-          {midiOutputState === "connected" && (
+          {deviceState === "connected" && (
             <Tooltip content="MIDI Output connected">
               <Badge color="grass" size="3">
                 <LightningBoltIcon />
               </Badge>
             </Tooltip>
           )}
-          {midiOutputState === "disconnected" && (
+          {deviceState === "disconnected" && (
             <Tooltip content="MIDI Output disconnected">
               <Badge color="amber" size="3" title="">
                 <ExclamationTriangleIcon />
@@ -208,7 +179,7 @@ export const Grid: FunctionComponent<Props> = ({
                   key={index}
                   index={index}
                   inputState={inputState}
-                  outputSend={outputObject?.throttledSend}
+                  throttledSend={device.throttledSend}
                   sendSendLayerType={sendSendLayerType}
                 />
               );
