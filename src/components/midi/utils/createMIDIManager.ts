@@ -1,6 +1,6 @@
 import { throttle } from "../../../utils/throttle";
 import { MIDI_OUT_THROTTLE_TIME } from "../constants";
-import type { MIDIDevice, MIDIDeviceConfig, MIDIOutputSend } from "../types";
+import type { MIDIDevice, MIDIOutputSend } from "../types";
 
 interface Params {
   onMIDIStateChange?: (state: MIDIState) => void;
